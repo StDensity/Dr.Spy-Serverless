@@ -1,0 +1,29 @@
+{
+	"name": "cloudflare-workers-openapi",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"register:dev": "dotenv -e .dev.vars -- bun src/register.ts ",
+		"register:prod": "dotenv -e .prod.vars -- bun src/register.ts ",
+		"deploy:dev": "wrangler deploy -e dev ",
+		"deploy:prod": "wrangler deploy -e prod",
+		"dev": "wrangler dev --test-scheduled",
+		"cf-typegen": "wrangler types"
+	},
+	"dependencies": {
+		"axios": "^1.7.9",
+		"chanfana": "^2.0.2",
+		"discord-hono": "^0.11.2",
+		"dotenv-cli": "^8.0.0",
+		"hono": "^4.4.7",
+		"ngrok": "^5.0.0-beta.2",
+		"zod": "^3.23.8"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20250121.0",
+		"@types/node": "20.8.3",
+		"@types/service-worker-mock": "^2.0.1",
+		"discord-api-types": "^0.37.117",
+		"wrangler": "^3.103.2"
+	}
+}
