@@ -1,6 +1,7 @@
 # DrSpy Serverless - A Discord Bot for OGAT Player Count
 
 DrSpy Serverless is a Discord bot built using Cloudflare Workers and the `discord-hono` library. It provides commands to fetch and display the online player count for the OGAT game.
+Special thanks to [discord-hono](https://github.com/luisfun/discord-hono) for the library and [cominu](https://github.com/cominu) for the api.
 
 ## Setup and Installation
 
