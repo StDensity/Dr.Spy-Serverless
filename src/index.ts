@@ -14,16 +14,21 @@ const app = new DiscordHono()
    })
    .cron("*/10 * * * *", async (c) => {
       // Updates Bot About Me
-      await updateBotAboutMe(c.env?.DISCORD_TOKEN as string);
+      await updateBotAboutMe(c.env?.DISCORD_TOKEN as string, c.env?.OGAT_API as string);
 
       const onlineCount = await getPlayerCount(c.env?.OGAT_API as string);
-      await c.rest.patch(
-         // @ts-ignore - The type definitions has not been updated yet
-         "/channels/{channel.id}",
-
-         [c.env?.DISCORD_UPDATE_CHANNEL],
-         { name: "Players: " + onlineCount }
-      );
+      try {
+         await c.rest.patch(
+            // @ts-ignore - The type definitions has not been updated yet
+            "/channels/{channel.id}",
+   
+            [c.env?.DISCORD_UPDATE_CHANNEL],
+            { name: "Players: " + onlineCount }
+         );
+      } catch (error) {
+         console.log("Could not update channel name");
+      }
+      
    });
 
 export default app;

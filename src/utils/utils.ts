@@ -1,9 +1,10 @@
 import axios from "axios";
 import { OnlineCount } from "../types/ogatapi";
 
-export const updateBotAboutMe = async (DISCORD_TOKEN: string) => {
+export const updateBotAboutMe = async (DISCORD_TOKEN: string, OGAT_API: string) => {
    const epochTime = getEpochTimePlus10Min();
-   const description = `OGAT active status bot.\nA #MOGA initiative.\nNext update <t:${epochTime}:R>`;
+   const onlineCount = await getPlayerCount(OGAT_API);
+   const description = `OGAT active status bot.\nA #MOGA initiative.\nOnline Count: ${onlineCount} \nNext update <t:${epochTime}:R>`;
    const endpoint = "https://discord.com/api/v10/applications/@me";
 
    const headers = {
