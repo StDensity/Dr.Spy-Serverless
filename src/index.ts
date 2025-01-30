@@ -1,4 +1,4 @@
-import { DiscordHono, _channels_$_messages } from "discord-hono";
+import { DiscordHono, _channels_$, _channels_$_messages } from "discord-hono";
 import { get_player_count } from "./commands/get_player_count";
 import { getPlayerCount, updateBotAboutMe } from "./utils/utils";
 
@@ -16,10 +16,9 @@ const app = new DiscordHono()
       const onlineCount = await getPlayerCount(c.env?.OGAT_API as string);
       try {
          await c.rest.patch(
-            // @ts-ignore - The type definitions has not been updated yet
-            "/channels/{channel.id}",
+            _channels_$,
 
-            [c.env?.DISCORD_UPDATE_CHANNEL],
+            [c.env?.DISCORD_UPDATE_CHANNEL as string],
             { name: "Players: " + onlineCount }
          );
       } catch (error) {

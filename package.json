@@ -13,7 +13,7 @@
 	"dependencies": {
 		"axios": "^1.7.9",
 		"chanfana": "^2.0.2",
-		"discord-hono": "^0.11.2",
+		"discord-hono": "^0.11.4",
 		"dotenv-cli": "^8.0.0",
 		"hono": "^4.4.7",
 		"ngrok": "^5.0.0-beta.2",
