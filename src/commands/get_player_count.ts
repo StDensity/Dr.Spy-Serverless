@@ -1,6 +1,4 @@
 import { CommandContext, Embed } from "discord-hono";
-import axios from "axios";
-import { OnlineCount } from "../types/ogatapi";
 import { getPlayerCount } from "../utils/utils";
 
 export const get_player_count = async (c: CommandContext) => {
