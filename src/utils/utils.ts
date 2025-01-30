@@ -1,25 +1,18 @@
 import axios from "axios";
 import { OnlineCount } from "../types/ogatapi";
+import { _applications_me, CronContext } from "discord-hono";
 
-export const updateBotAboutMe = async (DISCORD_TOKEN: string, OGAT_API: string) => {
+export const updateBotAboutMe = async (c: CronContext) => {
+   const { OGAT_API } = c.env!;
    const epochTime = getEpochTimePlus10Min();
    const onlineCount = await getPlayerCount(OGAT_API);
    const description = `OGAT active status bot. A #MOGA initiative.\nOnline Count: ${onlineCount} \nNext update <t:${epochTime}:R>`;
-   const endpoint = "https://discord.com/api/v10/applications/@me";
-
-   const headers = {
-      Authorization: `Bot ${DISCORD_TOKEN}`,
-      "Content-Type": "application/json",
-   };
-
-   const payload = {
-      description,
-   };
-
    try {
-      await axios.patch(endpoint, payload, { headers });
+      await c.rest.patch(_applications_me, [], {
+         description: description,
+      });
    } catch (error) {
-      console.error("Error updating bot about me");
+      console.error("Error updating bot about me", error);
    }
 };
 
