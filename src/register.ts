@@ -1,18 +1,9 @@
-import { InteractionContextType } from "discord-api-types/v10";
-import { Command, Option, register } from "discord-hono";
+import { register } from "discord-hono";
+import * as interactions from "./commands/index.js";
 
-const commands = [
-   new Command(
-      "get-player-count",
-      "Returns the no. of players in the game."
-   ).contexts(InteractionContextType.Guild),
-   new Command("configure", "Shows the configuration values.")
-      .contexts(InteractionContextType.Guild)
-      .default_member_permissions("8"),
-   //  new Command("help", "response help")
-   //     .options(new Option("text", "with text"))
-   //     .contexts(InteractionContextType.Guild),
-];
+const commands = Object.values(interactions)
+   .filter((e) => "command" in e)
+   .map((e) => e.command);
 
 register(
    commands,

@@ -1,9 +1,15 @@
-import { CommandContext, Embed } from "discord-hono";
-import { getPlayerCount } from "../utils/utils";
+import { Command, Embed } from "discord-hono";
+import { factory } from "../init.js";
+import { InteractionContextType } from "discord-api-types/v10";
+import { fetchOnlinePlayerCount } from "../utils/utils.js";
 
-export const get_player_count = async (c: CommandContext) => {
-   try {
-      const onlineCount = await getPlayerCount(c.env.OGAT_API!);
+export const getPlayerCount = factory.command(
+   new Command(
+      "get_player_count",
+      "Returns the no. of players in the game."
+   ).contexts(InteractionContextType.Guild), // Makes the command guild only
+   async (c) => {
+      const onlineCount = await fetchOnlinePlayerCount(c.env.OGAT_API);
       return c.res({
          embeds: [
             new Embed()
@@ -21,7 +27,5 @@ export const get_player_count = async (c: CommandContext) => {
                }),
          ],
       });
-   } catch (error) {
-      return c.res("An error occurred while fetching the player count.");
    }
-};
+);

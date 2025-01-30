@@ -5,7 +5,7 @@ import { _applications_me, CronContext } from "discord-hono";
 export const updateBotAboutMe = async (c: CronContext) => {
    const { OGAT_API } = c.env!;
    const epochTime = getEpochTimePlus10Min();
-   const onlineCount = await getPlayerCount(OGAT_API);
+   const onlineCount = await fetchOnlinePlayerCount(OGAT_API);
    const description = `OGAT active status bot. A #MOGA initiative.\nOnline Count: ${onlineCount} \nNext update <t:${epochTime}:R>`;
    try {
       await c.rest.patch(_applications_me, [], {
@@ -22,7 +22,7 @@ const getEpochTimePlus10Min = (): number => {
    return currentEpochTime + tenMinutesInSeconds;
 };
 
-export const getPlayerCount = async (OGAT_API: string) => {
+export const fetchOnlinePlayerCount = async (OGAT_API: string) => {
    const res = await axios.get<OnlineCount>(OGAT_API!);
    return res.data.online_count.public_lobby;
 };
