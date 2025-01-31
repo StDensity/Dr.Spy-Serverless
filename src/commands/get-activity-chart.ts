@@ -54,7 +54,7 @@ export const getActivityChart = factory.command(
             SELECT *, ROW_NUMBER() OVER (ORDER BY timestamp DESC) AS row_num
             FROM activity
         )
-        SELECT * FROM OrderedRows WHERE row_num % ? = 0 LIMIT ?;`
+        SELECT * FROM OrderedRows WHERE (row_num - 1) % ? = 0 LIMIT ?;` // row_num -1 cause to get the first row. ie. (1-0) / number = 0
       )
          .bind(config[duration].mod, config[duration].limit)
          .all();
