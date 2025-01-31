@@ -25,20 +25,20 @@ export const getActivityChart = factory.command(
 
    async (c) => {
       const config = {
-         // Every 10 minutes in an hour
+         // Every 10 minutes in an hour. Total 6 data points.
          "1-hour": {
             limit: 6,
             mod: 1,
          },
-         // Every 20 minutes in 6 hours
+         // Every 10 minutes in 6 hours. Total 36 data points.
          "6-hours": {
-            limit: 23,
-            mod: 2,
+            limit: 36,
+            mod: 1,
          },
-         // Every 30 minutes in 24 hours
+         // Every 10 minutes in 24 hours. Total 144 data points.
          "24-hours": {
-            limit: 48,
-            mod: 3,
+            limit: 144,
+            mod: 1,
          },
          // Every 2 hours in 7 days
          //  TODO: Plan how to implement. 1. Take average of the whole day. 2. Take the highest value of the day.
