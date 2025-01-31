@@ -59,7 +59,10 @@ export const getActivityChart = factory.command(
          .bind(config[duration].mod, config[duration].limit)
          .all();
 
-      const relative_time = results.map((entry) => {
+        //  Reverse the results to show the latest data on the right side.
+         const flippedResults = results.reverse();
+
+      const relative_time = flippedResults.map((entry) => {
          const date = new Date(entry.timestamp as string);
          return formatDistanceToNow(date, { addSuffix: true });
       });
@@ -70,7 +73,7 @@ export const getActivityChart = factory.command(
     labels: ${JSON.stringify(relative_time)},
     datasets: [{
       label: 'Active Players',
-      data: ${JSON.stringify(results.map((entry) => entry.active_players))}
+      data: ${JSON.stringify(flippedResults.map((entry) => entry.active_players))}
     }]
   },
   
