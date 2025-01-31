@@ -22,6 +22,7 @@ Follow these steps to deploy your own instance of DrSpy Serverless:
    bun install
    ```
    <!-- Add db setup db/schema.sql TODO -->
+   <!-- bunx wrangler d1 execute drspy-serverless-dev --remote --file=./src/db/schema.sql FOR DEV to deploy db -->
 
 3. **Configure Environment Variables:**
 
