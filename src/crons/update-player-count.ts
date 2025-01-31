@@ -7,6 +7,12 @@ export const updatePlayerCount = factory.cron("*/10 * * * *", async (c) => {
    await updateBotAboutMe(c);
 
    const onlineCount = await fetchOnlinePlayerCount(c.env.OGAT_API);
+
+   await c.env.DrspyServerless.prepare(
+      "INSERT INTO activity (active_players) VALUES (?);"
+   )
+      .bind(onlineCount) // Bind the player count dynamically
+      .run();
    try {
       await c.rest.patch(
          _channels_$,

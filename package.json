@@ -3,16 +3,17 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"register:dev": "dotenv -e .dev.vars -- bun src/register.ts ",
+		"register:dev": "dotenv -e .dev.vars -- bun src/register.ts -e dev",
 		"register:prod": "dotenv -e .prod.vars -- bun src/register.ts ",
 		"deploy:dev": "wrangler deploy -e dev ",
 		"deploy:prod": "wrangler deploy -e prod",
-		"dev": "wrangler dev --test-scheduled",
+		"dev": "wrangler dev --test-scheduled -e dev",
 		"cf-typegen": "wrangler types"
 	},
 	"dependencies": {
 		"axios": "^1.7.9",
 		"chanfana": "^2.0.2",
+		"date-fns": "^4.1.0",
 		"discord-hono": "^0.11.4",
 		"dotenv-cli": "^8.0.0",
 		"hono": "^4.4.7",

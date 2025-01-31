@@ -21,6 +21,7 @@ Follow these steps to deploy your own instance of DrSpy Serverless:
    ```bash
    bun install
    ```
+   <!-- Add db setup db/schema.sql TODO -->
 
 3. **Configure Environment Variables:**
 
@@ -54,6 +55,7 @@ Follow these steps to deploy your own instance of DrSpy Serverless:
       bun run register:prod
       ```
 
+
 5. **Deploy to Cloudflare Workers:**
 
    **Set Secrets using Wrangler:**
@@ -62,6 +64,8 @@ Follow these steps to deploy your own instance of DrSpy Serverless:
    Make sure you have Wrangler cli installed and logged into your account.
 
    -  **For Development:**
+
+   1. Create db as mentioned in `wrangler.json` and add those values.
 
       ```bash
       wrangler secret put DISCORD_APPLICATION_ID --env dev
@@ -74,6 +78,8 @@ Follow these steps to deploy your own instance of DrSpy Serverless:
       Follow the prompts to enter each secret value.
 
    -  **For Production:**
+
+   1. Create db as mentioned in `wrangler.json` and add those values.
 
       ```bash
       wrangler secret put DISCORD_APPLICATION_ID --env prod
@@ -106,12 +112,11 @@ Follow these steps to deploy your own instance of DrSpy Serverless:
    -  Go to the Discord Developer Portal.
    -  Enter the cloudflare worker endpoint to the [INTERACTIONS ENDPOINT URL](https://discord.com/developers/applications).
 
-    -  Create an invite URL from [Dashboard](https://discord.com/developers/applications). `YOUR_APP` > `OAuth2` tab > `OAuth2 URL Generator` > Check SCOPES: `bot` > URL `Copy` Paste the URL into the browser.
+   -  Create an invite URL from [Dashboard](https://discord.com/developers/applications). `YOUR_APP` > `OAuth2` tab > `OAuth2 URL Generator` > Check SCOPES: `bot` > URL `Copy` Paste the URL into the browser.
 
+# Local Development
 
-# Local Development 
-
-- For local development you can use `bun run dev`, it will use the variables in `.dev.vars`. 
-- You might want to proxy with `ngrok` to get a `https` endpoint.
-    - Install `ngrok` and run `ngrok http <port>`
-    - Now copy and paste the endpoint to the [INTERACTIONS ENDPOINT URL](https://discord.com/developers/applications).
+-  For local development you can use `bun run dev`, it will use the variables in `.dev.vars`.
+-  You might want to proxy with `ngrok` to get a `https` endpoint.
+   -  Install `ngrok` and run `ngrok http <port>`
+   -  Now copy and paste the endpoint to the [INTERACTIONS ENDPOINT URL](https://discord.com/developers/applications).
