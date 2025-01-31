@@ -18,7 +18,7 @@ export const getActivityChart = factory.command(
                { name: "last-1-hour", value: "1-hour" },
                { name: "last-6-hours", value: "6-hours" },
                { name: "last-24-hours", value: "24-hours" },
-               { name: "last-7-days", value: "7-days" }
+            //    { name: "last-7-days", value: "7-days" }
             )
             .required(true)
       ),
@@ -41,16 +41,17 @@ export const getActivityChart = factory.command(
             mod: 3,
          },
          // Every 2 hours in 7 days
-         "7-days": {
-            limit: 144,
-            mod: 7,
-         },
+        //  TODO: Plan how to implement. 1. Take average of the whole day. 2. Take the highest value of the day.
+        //  "7-days": {
+        //     limit: 144,
+        //     mod: 7,
+        //  },
       };
       const duration = (c.var.duration as keyof typeof config) || "1-hour";
 
       const { results } = await c.env.DrspyServerless.prepare(
          `WITH OrderedRows AS (
-            SELECT *, ROW_NUMBER() OVER (ORDER BY timestamp ASC) AS row_num
+            SELECT *, ROW_NUMBER() OVER (ORDER BY timestamp DESC) AS row_num
             FROM activity
         )
         SELECT * FROM OrderedRows WHERE row_num % ? = 0 LIMIT ?;`
