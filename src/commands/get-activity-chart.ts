@@ -117,7 +117,7 @@ export const getActivityChart = factory.command<Var>(
             embeds: [
                new Embed()
                   .title("A #MOGA Initiative")
-                  .description("Powered by #MOGA Analytics")
+                  .description(`Powered by #MOGA Analytics. \nThe chart shows the active players in the last ${duration}.`)
                   .author({
                      name: "Dr.Spy",
                      icon_url:
