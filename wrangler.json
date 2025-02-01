@@ -7,5 +7,26 @@
    "observability": {
       "enabled": true
    },
-   "triggers": { "crons": ["*/10 * * * *"] }
+   "triggers": { "crons": ["*/10 * * * *"] },
+
+   "env": {
+      "dev": {
+         "d1_databases": [
+            {
+               "database_id": "5d8afa2c-3a3d-4c5e-aab1-37332dd9a6a5",
+               "database_name": "drspy-serverless-dev",
+               "binding": "DrspyServerless"
+            }
+         ]
+      },
+      "prod": {
+         "d1_databases": [
+            {
+               "database_id": "e88714a2-aa35-4103-9329-3ed62f30fc8c",
+               "database_name": "drspy-serverless-prod",
+               "binding": "DrspyServerless"
+            }
+         ]
+      }
+   }
 }

@@ -1,6 +1,6 @@
 # DrSpy Serverless - A Discord Bot for OGAT Player Count
 
-DrSpy Serverless is a Discord bot built using Cloudflare Workers and the `discord-hono` library. It provides commands to fetch and display the online player count for the OGAT game.
+DrSpy Serverless is a Discord bot built using Cloudflare Workers and the `discord-hono` library. It provides commands to fetch and display the online player count for the OGAT game with graph support.
 Special thanks to [discord-hono](https://github.com/luisfun/discord-hono) for the library and [cominu](https://github.com/cominu) for the api.
 
 ## Setup and Installation
@@ -21,7 +21,20 @@ Follow these steps to deploy your own instance of DrSpy Serverless:
    ```bash
    bun install
    ```
+   <!-- Add db setup db/schema.sql TODO -->
+   <!-- bunx wrangler d1 execute drspy-serverless-dev --remote --file=./src/db/schema.sql FOR DEV to deploy db -->
 
+3. **Configuring the Database**
+
+   This project uses Cloudflare D1 as its database.  
+
+   - Sample data is provided in `sample_data.sql`.  
+   - The database schema is defined in `db/schema.sql`.  
+   - Refer to the [Cloudflare D1 documentation](https://developers.cloudflare.com/d1/) for setup instructions.  
+
+   **Note:** The local database does not sync with the remote database, and changes made to one will not reflect in the other.
+
+   
 3. **Configure Environment Variables:**
 
    Create two `.vars` files: `.dev.vars` for local development and `.prod.vars` for production deployment. These files will store your secrets and configuration values.
@@ -54,6 +67,7 @@ Follow these steps to deploy your own instance of DrSpy Serverless:
       bun run register:prod
       ```
 
+
 5. **Deploy to Cloudflare Workers:**
 
    **Set Secrets using Wrangler:**
@@ -62,6 +76,8 @@ Follow these steps to deploy your own instance of DrSpy Serverless:
    Make sure you have Wrangler cli installed and logged into your account.
 
    -  **For Development:**
+
+   1. Create db as mentioned in `wrangler.json` and add those values.
 
       ```bash
       wrangler secret put DISCORD_APPLICATION_ID --env dev
@@ -74,6 +90,8 @@ Follow these steps to deploy your own instance of DrSpy Serverless:
       Follow the prompts to enter each secret value.
 
    -  **For Production:**
+
+   1. Create db as mentioned in `wrangler.json` and add those values.
 
       ```bash
       wrangler secret put DISCORD_APPLICATION_ID --env prod
@@ -106,12 +124,11 @@ Follow these steps to deploy your own instance of DrSpy Serverless:
    -  Go to the Discord Developer Portal.
    -  Enter the cloudflare worker endpoint to the [INTERACTIONS ENDPOINT URL](https://discord.com/developers/applications).
 
-    -  Create an invite URL from [Dashboard](https://discord.com/developers/applications). `YOUR_APP` > `OAuth2` tab > `OAuth2 URL Generator` > Check SCOPES: `bot` > URL `Copy` Paste the URL into the browser.
+   -  Create an invite URL from [Dashboard](https://discord.com/developers/applications). `YOUR_APP` > `OAuth2` tab > `OAuth2 URL Generator` > Check SCOPES: `bot` > URL `Copy` Paste the URL into the browser.
 
+# Local Development
 
-# Local Development 
-
-- For local development you can use `bun run dev`, it will use the variables in `.dev.vars`. 
-- You might want to proxy with `ngrok` to get a `https` endpoint.
-    - Install `ngrok` and run `ngrok http <port>`
-    - Now copy and paste the endpoint to the [INTERACTIONS ENDPOINT URL](https://discord.com/developers/applications).
+-  For local development you can use `bun run dev`, it will use the variables in `.dev.vars`.
+-  You might want to proxy with `ngrok` to get a `https` endpoint.
+   -  Install `ngrok` and run `ngrok http <port>`
+   -  Now copy and paste the endpoint to the [INTERACTIONS ENDPOINT URL](https://discord.com/developers/applications).
