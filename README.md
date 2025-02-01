@@ -1,6 +1,6 @@
 # DrSpy Serverless - A Discord Bot for OGAT Player Count
 
-DrSpy Serverless is a Discord bot built using Cloudflare Workers and the `discord-hono` library. It provides commands to fetch and display the online player count for the OGAT game.
+DrSpy Serverless is a Discord bot built using Cloudflare Workers and the `discord-hono` library. It provides commands to fetch and display the online player count for the OGAT game with graph support.
 Special thanks to [discord-hono](https://github.com/luisfun/discord-hono) for the library and [cominu](https://github.com/cominu) for the api.
 
 ## Setup and Installation
@@ -24,6 +24,17 @@ Follow these steps to deploy your own instance of DrSpy Serverless:
    <!-- Add db setup db/schema.sql TODO -->
    <!-- bunx wrangler d1 execute drspy-serverless-dev --remote --file=./src/db/schema.sql FOR DEV to deploy db -->
 
+3. **Configuring the Database**
+
+   This project uses Cloudflare D1 as its database.  
+
+   - Sample data is provided in `sample_data.sql`.  
+   - The database schema is defined in `db/schema.sql`.  
+   - Refer to the [Cloudflare D1 documentation](https://developers.cloudflare.com/d1/) for setup instructions.  
+
+   **Note:** The local database does not sync with the remote database, and changes made to one will not reflect in the other.
+
+   
 3. **Configure Environment Variables:**
 
    Create two `.vars` files: `.dev.vars` for local development and `.prod.vars` for production deployment. These files will store your secrets and configuration values.
