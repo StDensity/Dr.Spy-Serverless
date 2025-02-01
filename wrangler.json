@@ -22,7 +22,7 @@
       "prod": {
          "d1_databases": [
             {
-               "database_id": "",
+               "database_id": "e88714a2-aa35-4103-9329-3ed62f30fc8c",
                "database_name": "drspy-serverless-prod",
                "binding": "DrspyServerless"
             }
