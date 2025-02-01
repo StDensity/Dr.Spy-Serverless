@@ -64,15 +64,23 @@ export const getActivityChart = factory.command<Var>(
       //  Reverse the results to show the latest data on the right side.
       const flippedResults = results.reverse();
 
-      const relative_time = flippedResults.map((entry) => {
+      const relative_time_in_minutes = flippedResults.map((entry) => {
          const date = new Date(entry.timestamp as string);
-         return formatDistanceToNowStrict(date, { addSuffix: true });
+         return formatDistanceToNowStrict(date, {
+            unit: "minute",
+         }).split(" ")[0]; // Returns the relative time from now in minutes in this format "1222 minutes". Then we split it to get the number.
+      });
+
+      const relative_time_in_hours = relative_time_in_minutes.map((time) => {
+         const hour = Math.floor(parseInt(time) / 60);
+         const minute = parseInt(time) % 60;
+         return `${hour}h ${minute}m ago`;
       });
 
       const chartConfig = `{
   type: 'line',
   data: {
-    labels: ${JSON.stringify(relative_time)},
+    labels: ${JSON.stringify(relative_time_in_hours)},
     datasets: [{
       label: 'Active Players',
       data: ${JSON.stringify(
@@ -82,7 +90,6 @@ export const getActivityChart = factory.command<Var>(
   },
   
 }`;
-
 
       const content = `https://quickchart.io/chart?c=${encodeURIComponent(
          chartConfig
@@ -104,24 +111,27 @@ export const getActivityChart = factory.command<Var>(
       };
 
       //   return c.res({}, fileData);
-      // The embed image uses the attachment://chart.webp from the blob that we sent. 
-      return c.res({
-         embeds: [
-            new Embed()
-               .title("A #MOGA Initiative")
-               .description("Powered by #MOGA Analytics")
-               .author({
-                  name: "Dr.Spy",
-                  icon_url:
-                     "https://media.discordapp.net/attachments/1241090998197686435/1241091020008198216/avatar.png?ex=664ae9d5&is=66499855&hm=8a09a8dd217dc8cddaebfa9b4bd223fa48049948fe9fedaacd0332b8e76d561d&=&format=webp&quality=lossless",
-               })
-               .image({ url: `attachment://chart.webp` })
-               .footer({
-                  text: '"Hey, the online count may include players in private lobbies"',
-                  icon_url:
-                     "https://media.discordapp.net/attachments/1241090998197686435/1241808909069451304/AVATAR_007_idle_source_gat_engineer.png?ex=664b8c2b&is=664a3aab&hm=3e6f28",
-               }),
-         ],
-      }, {blob, name: "chart.webp"});
+      // The embed image uses the attachment://chart.webp from the blob that we sent.
+      return c.res(
+         {
+            embeds: [
+               new Embed()
+                  .title("A #MOGA Initiative")
+                  .description("Powered by #MOGA Analytics")
+                  .author({
+                     name: "Dr.Spy",
+                     icon_url:
+                        "https://media.discordapp.net/attachments/1241090998197686435/1241091020008198216/avatar.png?ex=664ae9d5&is=66499855&hm=8a09a8dd217dc8cddaebfa9b4bd223fa48049948fe9fedaacd0332b8e76d561d&=&format=webp&quality=lossless",
+                  })
+                  .image({ url: `attachment://chart.webp` })
+                  .footer({
+                     text: '"Hey, the online count may include players in private lobbies"',
+                     icon_url:
+                        "https://media.discordapp.net/attachments/1241090998197686435/1241808909069451304/AVATAR_007_idle_source_gat_engineer.png?ex=664b8c2b&is=664a3aab&hm=3e6f28",
+                  }),
+            ],
+         },
+         { blob, name: "chart.webp" }
+      );
    }
 );
