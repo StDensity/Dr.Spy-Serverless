@@ -26,22 +26,26 @@ export const getActivityChart = factory.command<Var>(
       ),
 
    async (c) => {
+      // Configuration object to define limits and modifiers for different durations
       const config = {
-         // Every 10 minutes in an hour. Total 6 data points.
+         // Configuration for "1-hour" duration: 6 data points, modifier 1
+         // limit: Number of data points to retrieve for the chart
+         // mod:  Modifier for SQL query to sample data, e.g., mod: 1 means take every 1st row
          "1-hour": {
             limit: 6,
             mod: 1,
          },
-         // Every 10 minutes in 6 hours. Total 36 data points.
+         // Configuration for "6-hours" duration: 36 data points, modifier 1
          "6-hours": {
             limit: 36,
             mod: 1,
          },
-         // Every 10 minutes in 24 hours. Total 144 data points.
+         // Configuration for "24-hours" duration: 144 data points, modifier 1
          "24-hours": {
             limit: 144,
             mod: 1,
          },
+         // Configuration for "7-days" duration (TODO: Implementation needed)
          // Every 2 hours in 7 days
          //  TODO: Plan how to implement. 1. Take average of the whole day. 2. Take the highest value of the day.
          //  "7-days": {
@@ -49,8 +53,12 @@ export const getActivityChart = factory.command<Var>(
          //     mod: 7,
          //  },
       };
+      // Get the duration from command variables or default to "1-hour"
       const duration = (c.var.duration as keyof typeof config) || "1-hour";
 
+      // SQL query to fetch activity data from the database
+      // It uses a CTE (Common Table Expression) called OrderedRows to add a row number to each record
+      // Then, it selects records based on the modulo of the row number to sample data points
       const { results } = await c.env.DrspyServerless.prepare(
          `WITH OrderedRows AS (
             SELECT *, ROW_NUMBER() OVER (ORDER BY timestamp DESC) AS row_num
@@ -61,30 +69,35 @@ export const getActivityChart = factory.command<Var>(
          .bind(config[duration].mod, config[duration].limit)
          .all();
 
-      //  Reverse the results to show the latest data on the right side.
+      //  Reverse the results to show the latest data on the right side of the chart (latest data on the right)
       const flippedResults = results.reverse();
 
       const relative_time_in_minutes = flippedResults.map((entry) => {
-         const date = new Date(entry.timestamp as string);
+         const date = new Date(entry.timestamp as string); 
          return formatDistanceToNowStrict(date, {
-            unit: "minute",
+            unit: "minute", 
          }).split(" ")[0]; // Returns the relative time from now in minutes in this format "1222 minutes". Then we split it to get the number.
       });
 
+      // Convert relative times in minutes to a more human-readable format (e.g., "Xh Ym ago")
       const relative_time_in_hours = relative_time_in_minutes.map((time) => {
-         const hour = Math.floor(parseInt(time) / 60);
-         const minute = parseInt(time) % 60;
-         return `${hour}h ${minute}m ago`;
+         const hour = Math.floor(parseInt(time) / 60); // Calculate hours
+         const minute = parseInt(time) % 60; // Calculate remaining minutes
+         return `${hour}h ${minute}m ago`; // Format the relative time string
       });
 
+      // Configuration for QuickChart.io to generate the activity chart
+      // Documentation: https://quickchart.io/documentation/
       const chartConfig = `{
-  type: 'line',
+  type: 'line', // Chart type: line chart
   data: {
-    labels: ${JSON.stringify(relative_time_in_hours)},
+    labels: ${JSON.stringify(
+       relative_time_in_hours
+    )}, // Labels for the chart (relative times in "Xh Ym ago" format)
     datasets: [{
-      label: 'Active Players',
+      label: 'Active Players', // Label for the dataset
       data: ${JSON.stringify(
-         flippedResults.map((entry) => entry.active_players)
+         flippedResults.map((entry) => entry.active_players) // Data for the chart (active player counts from database results)
       )}
     }]
   },
@@ -117,7 +130,9 @@ export const getActivityChart = factory.command<Var>(
             embeds: [
                new Embed()
                   .title("A #MOGA Initiative")
-                  .description(`Powered by #MOGA Analytics. \nThe chart shows the active players in the last ${duration}.`)
+                  .description(
+                     `Powered by #MOGA Analytics. \nThe chart shows the active players in the last ${duration}.`
+                  )
                   .author({
                      name: "Dr.Spy",
                      icon_url:
