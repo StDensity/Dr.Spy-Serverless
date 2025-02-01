@@ -1,7 +1,7 @@
 import { Command, Option, Embed } from "discord-hono";
 import { factory } from "../init";
 import { InteractionContextType } from "discord-api-types/v10";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
 
 type Var = { duration: string };
 
@@ -66,7 +66,7 @@ export const getActivityChart = factory.command<Var>(
 
       const relative_time = flippedResults.map((entry) => {
          const date = new Date(entry.timestamp as string);
-         return formatDistanceToNow(date, { addSuffix: true });
+         return formatDistanceToNowStrict(date, { addSuffix: true });
       });
 
       const chartConfig = `{
@@ -82,6 +82,7 @@ export const getActivityChart = factory.command<Var>(
   },
   
 }`;
+
 
       const content = `https://quickchart.io/chart?c=${encodeURIComponent(
          chartConfig
