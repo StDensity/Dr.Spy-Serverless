@@ -9,9 +9,7 @@ export type Env = {
       DISCORD_APPLICATION_ID: string;
       DrspyServerless: D1Database;
    };
-   Variables: {
-      duration?: string;
-   };
+   
 };
 
 export const factory = createFactory<Env>();

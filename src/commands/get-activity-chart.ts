@@ -1,9 +1,11 @@
-import { Command, Embed, Option } from "discord-hono";
+import { Command, Option, Embed } from "discord-hono";
 import { factory } from "../init";
 import { InteractionContextType } from "discord-api-types/v10";
 import { formatDistanceToNow } from "date-fns";
 
-export const getActivityChart = factory.command(
+type Var = { duration: string };
+
+export const getActivityChart = factory.command<Var>(
    new Command("get-activity-chart", "Shows the activity chart.")
       .contexts(
          InteractionContextType.Guild //Makes the command guild only
@@ -101,6 +103,7 @@ export const getActivityChart = factory.command(
       };
 
       //   return c.res({}, fileData);
+      // The embed image uses the attachment://chart.webp from the blob that we sent. 
       return c.res({
          embeds: [
             new Embed()
@@ -111,13 +114,13 @@ export const getActivityChart = factory.command(
                   icon_url:
                      "https://media.discordapp.net/attachments/1241090998197686435/1241091020008198216/avatar.png?ex=664ae9d5&is=66499855&hm=8a09a8dd217dc8cddaebfa9b4bd223fa48049948fe9fedaacd0332b8e76d561d&=&format=webp&quality=lossless",
                })
-               .image({ url: content })
+               .image({ url: `attachment://chart.webp` })
                .footer({
                   text: '"Hey, the online count may include players in private lobbies"',
                   icon_url:
                      "https://media.discordapp.net/attachments/1241090998197686435/1241808909069451304/AVATAR_007_idle_source_gat_engineer.png?ex=664b8c2b&is=664a3aab&hm=3e6f28",
                }),
          ],
-      });
+      }, {blob, name: "chart.webp"});
    }
 );
