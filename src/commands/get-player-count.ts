@@ -1,7 +1,8 @@
 import { Command, Embed } from "discord-hono";
 import { factory } from "../init.js";
 import { InteractionContextType } from "discord-api-types/v10";
-import { fetchOnlinePlayerCount } from "../utils/utils.js";
+import { fetchOnlinePlayerCount, pickRandomItem } from "../utils/utils.js";
+import ads from "../utils/ads.json";
 
 export const getPlayerCount = factory.command(
    new Command(
@@ -10,11 +11,15 @@ export const getPlayerCount = factory.command(
    ).contexts(InteractionContextType.Guild), // Makes the command guild only
    async (c) => {
       const onlineCount = await fetchOnlinePlayerCount(c.env.OGAT_API);
+      const adsText = ads as AdData;
+      const addToDisplay = pickRandomItem(adsText.website);
       return c.res({
          embeds: [
             new Embed()
                .title("A #MOGA Initiative")
-               .description(`Online: ${onlineCount}`)
+               .description(
+                  `Online: ${onlineCount} \n\n> ${addToDisplay}`
+               )
                .author({
                   name: "Dr.Spy",
                   icon_url:
