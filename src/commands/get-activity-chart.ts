@@ -1,7 +1,9 @@
 import { Command, Option, Embed } from "discord-hono";
 import { factory } from "../init";
 import { InteractionContextType } from "discord-api-types/v10";
-import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
+import { formatDistanceToNowStrict } from "date-fns";
+import ads from "../utils/ads.json";
+import { pickRandomItem } from "../utils/utils";
 
 type Var = { duration: string };
 
@@ -125,13 +127,15 @@ export const getActivityChart = factory.command<Var>(
 
       //   return c.res({}, fileData);
       // The embed image uses the attachment://chart.webp from the blob that we sent.
+      const adsText = ads as AdData;
+      const addToDisplay = pickRandomItem(adsText.website);
       return c.res(
          {
             embeds: [
                new Embed()
                   .title("A #MOGA Initiative")
                   .description(
-                     `Powered by #MOGA Analytics. \nThe chart shows the active players in the last ${duration}.`
+                     `Powered by #MOGA Analytics. \nThe chart shows the active players in the last ${duration}. \n\n> ${addToDisplay}`
                   )
                   .author({
                      name: "Dr.Spy",

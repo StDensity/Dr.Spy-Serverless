@@ -1,0 +1,3 @@
+interface AdData {
+   website: string[];
+}
